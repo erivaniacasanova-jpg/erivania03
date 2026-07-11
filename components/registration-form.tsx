@@ -448,11 +448,11 @@ export default function RegistrationForm({ representante }: RegistrationFormProp
           <p className="text-sm sm:text-base text-gray-700">
             {"Para ativarmos o seu plano, preencha o formulário a seguir corretamente. O cadastro é rápido, sem consulta ao SPC/Serasa e sem fidelidade."}
           </p>
-          <div className="rounded-lg bg-yellow-50 border border-yellow-300 p-4">
-            <p className="text-sm sm:text-base font-bold text-yellow-800">
+          <div className="rounded-lg bg-blue-50 border border-blue-600 p-4">
+            <p className="text-sm sm:text-base font-bold text-blue-800">
               {"ATENÇÃO!"}
             </p>
-            <p className="text-sm sm:text-base text-yellow-800 mt-1">
+            <p className="text-sm sm:text-base text-blue-800 mt-1">
               {"Ao concluir o seu cadastro, será necessário o pagamento da sua adesão associativa, correspondente ao valor do plano escolhido por você."}
             </p>
           </div>
