@@ -81,6 +81,7 @@ export default function RegistrationForm({ representante }: RegistrationFormProp
   const REFERRAL_ID = representante?.id || DEFAULT_REFERRAL_ID
 
   const { toast } = useToast()
+  const [showWelcome, setShowWelcome] = useState(true)
   const [step, setStep] = useState(0)
   const [loading, setLoading] = useState(false)
   const [showErrorModal, setShowErrorModal] = useState(false)
@@ -439,17 +440,37 @@ export default function RegistrationForm({ representante }: RegistrationFormProp
     </div>
   )
 
+  // ── Welcome screen ──
+  if (showWelcome) {
+    return (
+      <div className="flex flex-col items-center justify-center gap-6 py-8 text-center">
+        <div className="max-w-xl space-y-4">
+          <p className="text-sm sm:text-base text-gray-700">
+            {"Para ativarmos o seu plano, preencha o formulário a seguir corretamente. O cadastro é rápido, sem consulta ao SPC/Serasa e sem fidelidade."}
+          </p>
+          <div className="rounded-lg bg-yellow-50 border border-yellow-300 p-4">
+            <p className="text-sm sm:text-base font-bold text-yellow-800">
+              {"ATENÇÃO!"}
+            </p>
+            <p className="text-sm sm:text-base text-yellow-800 mt-1">
+              {"Ao concluir o seu cadastro, será necessário o pagamento da sua adesão associativa, correspondente ao valor do plano escolhido por você."}
+            </p>
+          </div>
+        </div>
+        <Button
+          onClick={() => setShowWelcome(false)}
+          className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 text-base md:text-lg font-semibold rounded-lg shadow-lg"
+        >
+          {"INICIAR CADASTRO"}
+        </Button>
+      </div>
+    )
+  }
+
   // ── Render ──
   return (
     <>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4 md:gap-6">
-        {step === 0 && (
-          <div className="text-center mb-2">
-            <p className="text-sm sm:text-base text-gray-700">
-              {"É uma satisfação receber você em nossa associação. Para ativarmos o seu plano, preencha o formulário abaixo corretamente. O cadastro é rápido, sem consulta ao SPC/Serasa e sem fidelidade. Ao concluir o cadastro, será necessário realizar a sua adesão associativa correspondente ao valor do plano escolhido."}
-            </p>
-          </div>
-        )}
         <StepIndicator />
         <h2 className="text-lg md:text-xl font-semibold text-center text-gray-800">{STEP_TITLES[step]}</h2>
 
