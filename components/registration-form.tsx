@@ -70,9 +70,9 @@ interface RegistrationFormProps {
 
 const STEP_TITLES = [
   "Qual o tipo de chip você deseja utilizar?",
-  "Qual das 3 operadoras abaixo tem o melhor sinal de cobertura em sua cidade?",
-  "Dados Pessoais",
-  "Contato",
+  "Qual das operadoras abaixo tem o melhor sinal de cobertura em sua cidade",
+  "Dados para cadastro",
+  "Dados para contato",
   "Endereço",
   "Forma de Envio",
 ]
