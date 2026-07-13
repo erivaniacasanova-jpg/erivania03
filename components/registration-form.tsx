@@ -69,12 +69,12 @@ interface RegistrationFormProps {
 }
 
 const STEP_TITLES = [
-  "Qual o tipo de chip você deseja utilizar?",
   "Qual das operadoras abaixo tem o melhor sinal de cobertura em sua cidade",
-  "Dados para cadastro",
+  "Qual o tipo de chip você deseja utilizar?",
+  "Forma de Envio",
+  "Preencha seus dados para cadastro",
   "Dados para contato",
   "Endereço",
-  "Forma de Envio",
 ]
 
 export default function RegistrationForm({ representante }: RegistrationFormProps) {
@@ -371,12 +371,12 @@ export default function RegistrationForm({ representante }: RegistrationFormProp
   // ── Step validation ──
   const canContinue = (): boolean => {
     switch (step) {
-      case 0: return formData.typeChip !== ""
-      case 1: return formData.plan_id !== ""
-      case 2: return formData.cpf.replace(/\D/g, "").length === 11 && formData.birth.replace(/\D/g, "").length === 8 && formData.name.trim() !== ""
-      case 3: return formData.email.trim() !== "" && formData.cell.replace(/\D/g, "").length === 11
-      case 4: return formData.cep.replace(/\D/g, "").length === 8 && formData.district.trim() !== "" && formData.city.trim() !== "" && formData.state !== "" && formData.street.trim() !== ""
-      case 5: return formData.typeFrete !== ""
+      case 0: return formData.plan_id !== ""
+      case 1: return formData.typeChip !== ""
+      case 2: return formData.typeFrete !== ""
+      case 3: return formData.cpf.replace(/\D/g, "").length === 11 && formData.birth.replace(/\D/g, "").length === 8 && formData.name.trim() !== ""
+      case 4: return formData.email.trim() !== "" && formData.cell.replace(/\D/g, "").length === 11
+      case 5: return formData.cep.replace(/\D/g, "").length === 8 && formData.district.trim() !== "" && formData.city.trim() !== "" && formData.state !== "" && formData.street.trim() !== ""
       default: return false
     }
   }
@@ -384,7 +384,7 @@ export default function RegistrationForm({ representante }: RegistrationFormProp
   const goNext = () => { if (canContinue() && step < 5) setStep(step + 1) }
   const goBack = () => {
     if (step > 0) {
-      if (step === 2) {
+      if (step === 1) {
         setSelectedOperator(null)
       }
       setStep(step - 1)
@@ -474,15 +474,14 @@ export default function RegistrationForm({ representante }: RegistrationFormProp
         <StepIndicator />
         <h2 className="text-lg md:text-xl font-semibold text-center text-gray-800">{STEP_TITLES[step]}</h2>
 
-        {/* BLOCO 1 - Tipo de Chip */}
-        {step === 0 && (
+        {/* BLOCO 2 - Tipo de Chip */}
+        {step === 1 && (
           <Card>
             <CardContent className="pt-6 px-6">
               <RadioGroup
                 value={formData.typeChip}
                 onValueChange={(value) => {
                   handleInputChange("typeChip", value)
-                  handleInputChange("plan_id", "")
                   handleInputChange("typeFrete", "")
                 }}
                 className="flex flex-col gap-4"
@@ -504,8 +503,8 @@ export default function RegistrationForm({ representante }: RegistrationFormProp
           </Card>
         )}
 
-        {/* BLOCO 2 - Plano */}
-        {step === 1 && (
+        {/* BLOCO 1 - Plano */}
+        {step === 0 && (
           <Card>
             <CardContent className="pt-6 px-6">
               <div className="flex flex-col gap-4">
@@ -615,8 +614,8 @@ export default function RegistrationForm({ representante }: RegistrationFormProp
           </Card>
         )}
 
-        {/* BLOCO 3 - Dados Pessoais */}
-        {step === 2 && (
+        {/* BLOCO 4 - Dados Pessoais */}
+        {step === 3 && (
           <Card>
             <CardContent className="pt-6 px-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -638,8 +637,8 @@ export default function RegistrationForm({ representante }: RegistrationFormProp
           </Card>
         )}
 
-        {/* BLOCO 4 - Contato */}
-        {step === 3 && (
+        {/* BLOCO 5 - Contato */}
+        {step === 4 && (
           <Card>
             <CardContent className="pt-6 px-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -659,8 +658,8 @@ export default function RegistrationForm({ representante }: RegistrationFormProp
           </Card>
         )}
 
-        {/* BLOCO 5 - Endereço */}
-        {step === 4 && (
+        {/* BLOCO 6 - Endereço */}
+        {step === 5 && (
           <Card>
             <CardContent className="pt-6 px-6">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -703,8 +702,8 @@ export default function RegistrationForm({ representante }: RegistrationFormProp
           </Card>
         )}
 
-        {/* BLOCO 6 - Forma de Envio */}
-        {step === 5 && (
+        {/* BLOCO 3 - Forma de Envio */}
+        {step === 2 && (
           <Card>
             <CardContent className="pt-6 px-6">
               <RadioGroup value={formData.typeFrete} onValueChange={(value) => handleInputChange("typeFrete", value)} className="flex flex-col gap-3">
