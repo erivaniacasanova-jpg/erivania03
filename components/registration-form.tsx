@@ -578,7 +578,7 @@ export default function RegistrationForm({ representante }: RegistrationFormProp
 
                     <div>
                       <h3 className="text-lg font-semibold text-gray-900 mb-3">
-                        Qual plano você deseja?
+                        Qual plano você deseja para essa cobertura?
                       </h3>
 
                       <RadioGroup
@@ -600,12 +600,41 @@ export default function RegistrationForm({ representante }: RegistrationFormProp
                             <div className="flex-1">
                               <div className="font-medium text-gray-900">{plan.name}</div>
                               <div className="text-sm text-gray-600 mt-1">
-                                R$ {plan.price.toFixed(2).replace(".", ",")}
+                                R$ {plan.price.toFixed(2).replace(".", ",")}/mês
                               </div>
                             </div>
                           </label>
                         ))}
                       </RadioGroup>
+
+                      <div className="mt-4 space-y-2 text-sm text-gray-600">
+                        <p>Após consumo total da franquia navegue ilimitado em velocidade reduzida.</p>
+                        <p className="font-medium">Apps Ilimitados que não consomem da franquia:</p>
+                        <div className="flex flex-wrap gap-2">
+                          {selectedOperator === "TIM" && (
+                            <>
+                              <span className="inline-flex items-center rounded-md bg-gray-100 px-2.5 py-1 text-xs font-medium text-gray-700">WhatsApp</span>
+                              <span className="inline-flex items-center rounded-md bg-gray-100 px-2.5 py-1 text-xs font-medium text-gray-700">Facebook</span>
+                              <span className="inline-flex items-center rounded-md bg-gray-100 px-2.5 py-1 text-xs font-medium text-gray-700">Instagram</span>
+                            </>
+                          )}
+                          {selectedOperator === "CLARO" && (
+                            <>
+                              <span className="inline-flex items-center rounded-md bg-gray-100 px-2.5 py-1 text-xs font-medium text-gray-700">WhatsApp</span>
+                              <span className="inline-flex items-center rounded-md bg-gray-100 px-2.5 py-1 text-xs font-medium text-gray-700">Waze</span>
+                              <span className="inline-flex items-center rounded-md bg-gray-100 px-2.5 py-1 text-xs font-medium text-gray-700">Facebook</span>
+                              <span className="inline-flex items-center rounded-md bg-gray-100 px-2.5 py-1 text-xs font-medium text-gray-700">Instagram</span>
+                            </>
+                          )}
+                          {selectedOperator === "VIVO" && (
+                            <>
+                              <span className="inline-flex items-center rounded-md bg-gray-100 px-2.5 py-1 text-xs font-medium text-gray-700">WhatsApp</span>
+                              <span className="inline-flex items-center rounded-md bg-gray-100 px-2.5 py-1 text-xs font-medium text-gray-700">Facebook</span>
+                              <span className="inline-flex items-center rounded-md bg-gray-100 px-2.5 py-1 text-xs font-medium text-gray-700">Instagram</span>
+                            </>
+                          )}
+                        </div>
+                      </div>
                     </div>
                   </div>
                 )}
