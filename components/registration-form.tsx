@@ -609,7 +609,7 @@ export default function RegistrationForm({ representante }: RegistrationFormProp
 
                       <div className="mt-4 space-y-2 text-sm text-gray-600">
                         <p>Após consumo total da franquia navegue ilimitado em velocidade reduzida.</p>
-                        <p className="font-medium">Apps Ilimitados que não consomem da franquia:</p>
+                        <p className="font-medium">Apps que não consomem da franquia:</p>
                         <div className="flex flex-wrap gap-2">
                           {selectedOperator === "TIM" && (
                             <>
