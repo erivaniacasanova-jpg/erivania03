@@ -598,7 +598,7 @@ export default function RegistrationForm({ representante }: RegistrationFormProp
                           >
                             <RadioGroupItem value={plan.id} id={`plan-${plan.id}`} className="mt-0.5" />
                             <div className="flex-1">
-                              <div className="font-medium text-gray-900">{plan.name}</div>
+                              <div className="font-medium text-gray-900">{plan.name.replace(/COM LIGACAO/g, "COM LIGAÇÃO")}</div>
                               <div className="text-sm text-gray-600 mt-1">
                                 R$ {plan.price.toFixed(2).replace(".", ",")}/mês
                               </div>
