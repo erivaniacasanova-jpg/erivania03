@@ -742,14 +742,14 @@ export default function RegistrationForm({ representante }: RegistrationFormProp
                       <RadioGroupItem value="Carta" id="frete-carta" className="mt-0.5" />
                       <div>
                         <span className="font-medium text-gray-900">{"Enviar via Carta Registrada"}</span>
-                        <p className="text-sm text-gray-500">{"Para quem vai receber o chip pelos Correios"}</p>
+                        <p className="text-sm text-gray-500">{"Para quem vai receber o chip pelos Correios (Prazo de entrega 7 a 15 dias úteis.) Você receberá um código de rastreio."}</p>
                       </div>
                     </label>
                     <label htmlFor="frete-sem" className={`flex items-start gap-3 p-4 rounded-lg border-2 cursor-pointer transition-colors ${formData.typeFrete === "semFrete" ? "border-blue-600 bg-blue-50" : "border-gray-200 hover:border-gray-300"}`}>
                       <RadioGroupItem value="semFrete" id="frete-sem" className="mt-0.5" />
                       <div>
                         <span className="font-medium text-gray-900">{"Retirar na Associação ou com um Associado"}</span>
-                        <p className="text-sm text-gray-500">{"Se você vai retirar o chip pessoalmente com um representante ou no caso dos planos da Vivo, vai comprar um chip para ativar de forma imediata"}</p>
+                        <p className="text-sm text-gray-500">{"Se você vai retirar o chip pessoalmente com um representante"}</p>
                       </div>
                     </label>
                   </>
