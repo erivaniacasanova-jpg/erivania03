@@ -187,8 +187,7 @@ export default function RegistrationForm({ representante }: RegistrationFormProp
       }
     } catch (error) {
       console.error("Erro ao validar WhatsApp:", error)
-      setWhatsappValid(false)
-      toast({ title: "Erro na validação", description: "Não foi possível validar o WhatsApp. Tente novamente.", variant: "destructive" })
+      setWhatsappValid(null)
     } finally { setWhatsappValidating(false) }
   }
 
