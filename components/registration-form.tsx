@@ -173,17 +173,18 @@ export default function RegistrationForm({ representante }: RegistrationFormProp
     if (numbers.length !== 11) { setWhatsappValid(false); return }
     setWhatsappValidating(true)
     try {
-      const waNumber = `55${numbers}`
-      const response = await fetch("https://webhook.fiqon.app/webhook/019b97c2-6aed-7162-8a3a-1fd63694ecd6/5fb591d0-1499-4928-9b9f-198abec46afe", {
+      const response = await fetch("/api/validate-whatsapp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ chat: { phone: waNumber } }),
+        body: JSON.stringify({ phone: numbers }),
       })
       const data = await response.json()
-      if (data?.result?.BODY?.existe) { setWhatsappValid(true) }
-      else {
+      if (data.existe === true) { setWhatsappValid(true) }
+      else if (data.existe === false) {
         setWhatsappValid(false)
         toast({ title: "WhatsApp inválido", description: "O número informado não possui WhatsApp. Por favor, verifique.", variant: "destructive" })
+      } else {
+        setWhatsappValid(null)
       }
     } catch (error) {
       console.error("Erro ao validar WhatsApp:", error)
