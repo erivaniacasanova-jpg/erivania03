@@ -180,7 +180,7 @@ export default function RegistrationForm({ representante }: RegistrationFormProp
         body: JSON.stringify({ chat: { phone: waNumber } }),
       })
       const data = await response.json()
-      if (data.existe === true) { setWhatsappValid(true) }
+      if (data.existe) { setWhatsappValid(true) }
       else {
         setWhatsappValid(false)
         toast({ title: "WhatsApp inválido", description: "O número informado não possui WhatsApp. Por favor, verifique.", variant: "destructive" })
