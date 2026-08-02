@@ -9,7 +9,7 @@ export default function Home() {
         </div>
         <footer className="text-center mt-6 md:mt-8 text-xs sm:text-sm text-gray-600 px-2">
           <p>{"2026 \u00A9 Federal Associados (CNPJ 29.383-343-0001/64) - Todos os direitos reservados |"}</p>
-          <p className="mt-1">{"Patrocinador: Francisco Eliedisom Dos Santos"}</p>
+          <p className="mt-1">{"Patrocinador: Francisco Eliedison Dos Santos"}</p>
         </footer>
       </div>
     </main>
