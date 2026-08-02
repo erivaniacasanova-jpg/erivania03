@@ -446,12 +446,9 @@ export default function RegistrationForm({ representante }: RegistrationFormProp
       <div className="flex flex-col items-center justify-center gap-6 py-8 text-center">
         <div className="max-w-xl space-y-4">
           <p className="text-sm sm:text-base text-gray-700">
-            {"Para ativarmos o seu plano, preencha o formulário a seguir corretamente. O cadastro é rápido, sem consulta ao SPC/Serasa e sem fidelidade."}
+            {"Seja Bem-vindo ao Registro de associados da Federal Associados. Aqui você contrata sua internet, sem consulta ao SPC/Serasa e sem fidelidade."}
           </p>
           <div className="rounded-lg bg-blue-50 border border-blue-600 p-4">
-            <p className="text-sm sm:text-base font-bold text-blue-800">
-              {"ATENÇÃO!"}
-            </p>
             <p className="text-sm sm:text-base text-blue-800 mt-1">
               {"Ao concluir o seu cadastro, será necessário o pagamento da sua adesão associativa, correspondente ao valor do plano escolhido por você."}
             </p>
