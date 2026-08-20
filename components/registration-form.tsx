@@ -46,7 +46,6 @@ const BRAZILIAN_STATES = [
 
 const PLANS = {
   VIVO: [
-    { id: "69", name: "60GB COM LIGACAO", price: 69.9, esim: true },
     { id: "52", name: "100GB COM LIGACAO", price: 99.99, esim: true },
   ],
   TIM: [
