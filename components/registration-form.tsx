@@ -45,7 +45,9 @@ const BRAZILIAN_STATES = [
 ]
 
 const PLANS = {
-  VIVO: [ ],
+  VIVO: [
+    { id: "0", name: "Indisponível no momento", price: 0, esim: false },
+  ],
   TIM: [
     { id: "56", name: "100GB COM LIGACAO", price: 69.9, esim: true },
     { id: "154", name: "500GB SEM LIGAÇÃO", price: 189.9, esim: true },
