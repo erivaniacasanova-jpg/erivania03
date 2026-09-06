@@ -349,9 +349,9 @@ export default function RegistrationForm({ representante }: RegistrationFormProp
           const lowerMessage = webhookMessage.toLowerCase()
           const isError = lowerMessage.includes("erro") || lowerMessage.includes("já") || lowerMessage.includes("inválido") || lowerMessage.includes("falha") || lowerMessage.includes("não") || lowerMessage.includes("sendo utilizado") || !response.ok
           if (isError) { setErrorMessage(webhookMessage); setShowErrorModal(true); setLoading(false); return }
-          toast({ title: "Sucesso", description: webhookMessage }); setLoading(false); return
+          toast({ description: webhookMessage }); setLoading(false); return
         }
-        if (response.ok) { toast({ title: "Sucesso", description: "Cadastro realizado com sucesso!" }); setLoading(false); return }
+        if (response.ok) { setLoading(false); return }
         setErrorMessage("Erro ao processar cadastro. Tente novamente."); setShowErrorModal(true); setLoading(false)
       } catch (fetchError: unknown) {
         clearTimeout(timeoutId)
