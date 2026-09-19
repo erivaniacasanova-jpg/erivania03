@@ -431,7 +431,9 @@ export default function RegistrationForm({ representante }: RegistrationFormProp
     <>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4 md:gap-6">
         <StepIndicator />
-        <h2 className="text-lg md:text-xl font-semibold text-center text-gray-800">{STEP_TITLES[step]}</h2>
+        {!(step === 0 && selectedOperator) && (
+          <h2 className="text-lg md:text-xl font-semibold text-center text-gray-800">{STEP_TITLES[step]}</h2>
+        )}
 
         {/* BLOCO 2 - Tipo de Chip */}
         {step === 1 && (
@@ -519,20 +521,6 @@ export default function RegistrationForm({ representante }: RegistrationFormProp
                 {/* Seletor de Planos */}
                 {selectedOperator && (
                   <div className="flex flex-col gap-4">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setSelectedOperator(null)
-                        handleInputChange("plan_id", "")
-                      }}
-                      className="flex items-center gap-2 text-blue-600 hover:text-blue-700 text-sm font-medium"
-                    >
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                      </svg>
-                      Voltar para operadoras
-                    </button>
-
                     <div>
                       <h3 className="text-lg font-semibold text-gray-900 mb-3">
                         Qual plano você deseja para essa cobertura?
@@ -745,7 +733,21 @@ export default function RegistrationForm({ representante }: RegistrationFormProp
 
         {/* Navigation buttons */}
         <div className="flex items-center justify-between gap-4">
-          {step > 0 ? (
+          {step === 0 && selectedOperator ? (
+            <button
+              type="button"
+              onClick={() => {
+                setSelectedOperator(null)
+                handleInputChange("plan_id", "")
+              }}
+              className="flex items-center gap-2 text-blue-600 hover:text-blue-700 text-sm font-medium"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+              Voltar para operadoras
+            </button>
+          ) : step > 0 ? (
             <Button type="button" variant="outline" onClick={goBack}>{"Voltar"}</Button>
           ) : <div />}
           {step < 5 ? (
