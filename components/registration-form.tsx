@@ -473,10 +473,10 @@ export default function RegistrationForm({ representante }: RegistrationFormProp
                     <button
                       type="button"
                       onClick={() => setSelectedOperator("VIVO")}
-                      className="flex items-center justify-between p-4 rounded-lg border-2 border-gray-200 hover:border-blue-600 hover:bg-blue-50 transition-colors cursor-pointer"
+                      className="flex items-center justify-between p-4 rounded-lg border-2 border-violet-300 bg-violet-50 hover:border-violet-500 hover:bg-violet-100 transition-colors cursor-pointer"
                     >
-                      <span className="font-semibold text-lg" style={{ color: "#8B5CF6" }}>VIVO</span>
-                      <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <span className="font-semibold text-lg text-violet-700">VIVO</span>
+                      <svg className="w-5 h-5 text-violet-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                       </svg>
                     </button>
@@ -484,10 +484,10 @@ export default function RegistrationForm({ representante }: RegistrationFormProp
                     <button
                       type="button"
                       onClick={() => setSelectedOperator("TIM")}
-                      className="flex items-center justify-between p-4 rounded-lg border-2 border-gray-200 hover:border-blue-600 hover:bg-blue-50 transition-colors cursor-pointer"
+                      className="flex items-center justify-between p-4 rounded-lg border-2 border-blue-300 bg-blue-50 hover:border-blue-500 hover:bg-blue-100 transition-colors cursor-pointer"
                     >
-                      <span className="font-semibold text-lg" style={{ color: "#1E90FF" }}>TIM</span>
-                      <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <span className="font-semibold text-lg text-blue-700">TIM</span>
+                      <svg className="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                       </svg>
                     </button>
@@ -495,10 +495,10 @@ export default function RegistrationForm({ representante }: RegistrationFormProp
                     <button
                       type="button"
                       onClick={() => setSelectedOperator("CLARO")}
-                      className="flex items-center justify-between p-4 rounded-lg border-2 border-gray-200 hover:border-blue-600 hover:bg-blue-50 transition-colors cursor-pointer"
+                      className="flex items-center justify-between p-4 rounded-lg border-2 border-red-300 bg-red-50 hover:border-red-500 hover:bg-red-100 transition-colors cursor-pointer"
                     >
-                      <span className="font-semibold text-lg" style={{ color: "#DC143C" }}>CLARO</span>
-                      <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <span className="font-semibold text-lg text-red-700">CLARO</span>
+                      <svg className="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                       </svg>
                     </button>
@@ -548,12 +548,30 @@ export default function RegistrationForm({ representante }: RegistrationFormProp
                             key={plan.id}
                             htmlFor={`plan-${plan.id}`}
                             className={`flex items-start gap-3 p-4 rounded-lg border-2 cursor-pointer transition-colors ${
-                              formData.plan_id === plan.id
-                                ? "border-blue-600 bg-blue-50"
-                                : "border-gray-200 hover:border-gray-300"
+                              selectedOperator === "VIVO"
+                                ? formData.plan_id === plan.id
+                                  ? "border-violet-600 bg-violet-50"
+                                  : "border-violet-200 bg-violet-50/40 hover:border-violet-400 hover:bg-violet-50"
+                                : selectedOperator === "TIM"
+                                  ? formData.plan_id === plan.id
+                                    ? "border-blue-600 bg-blue-50"
+                                    : "border-blue-200 bg-blue-50/40 hover:border-blue-400 hover:bg-blue-50"
+                                  : formData.plan_id === plan.id
+                                    ? "border-red-600 bg-red-50"
+                                    : "border-red-200 bg-red-50/40 hover:border-red-400 hover:bg-red-50"
                             }`}
                           >
-                            <RadioGroupItem value={plan.id} id={`plan-${plan.id}`} className="mt-0.5" />
+                            <RadioGroupItem
+                              value={plan.id}
+                              id={`plan-${plan.id}`}
+                              className={`mt-0.5 ${
+                                selectedOperator === "VIVO"
+                                  ? "border-violet-500 text-violet-600"
+                                  : selectedOperator === "TIM"
+                                    ? "border-blue-500 text-blue-600"
+                                    : "border-red-500 text-red-600"
+                              }`}
+                            />
                             <div className="flex-1">
                               <div className="font-medium text-gray-900">{plan.name.replace(/COM LIGACAO/g, "COM LIGAÇÃO")}</div>
                               <div className="text-sm text-gray-600 mt-1">
