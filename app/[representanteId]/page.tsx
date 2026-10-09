@@ -53,7 +53,7 @@ export default async function RepresentantePage({ params }: { params: Promise<{ 
         </div>
         <footer className="text-center mt-6 md:mt-8 text-xs sm:text-sm text-gray-600 px-2">
           <p>2026 © Federal Associados (CNPJ 29.383-343-0001/64) - Todos os direitos reservados |</p>
-          <p className="mt-1">Patrocinador: {representante.nome}</p>
+          <p className="mt-1">Você está sendo convidado por: {representante.nome}</p>
         </footer>
       </div>
     </main>
