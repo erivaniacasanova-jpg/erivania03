@@ -78,6 +78,7 @@ const STEP_TITLES = [
   "Preencha seus dados para cadastro",
   "Dados para contato",
   "Endereço",
+  "Confirmação de Adesão",
 ]
 
 export default function RegistrationForm({ representante }: RegistrationFormProps) {
@@ -372,11 +373,12 @@ export default function RegistrationForm({ representante }: RegistrationFormProp
       case 3: return formData.cpf.replace(/\D/g, "").length === 11 && formData.birth.replace(/\D/g, "").length === 8 && formData.name.trim() !== ""
       case 4: return formData.email.trim() !== "" && formData.cell.replace(/\D/g, "").length === 11
       case 5: return formData.cep.replace(/\D/g, "").length === 8 && formData.district.trim() !== "" && formData.city.trim() !== "" && formData.state !== "" && formData.street.trim() !== ""
+      case 6: return true
       default: return false
     }
   }
 
-  const goNext = () => { if (canContinue() && step < 5) setStep(step + 1) }
+  const goNext = () => { if (canContinue() && step < 6) setStep(step + 1) }
   const goBack = () => {
     if (step > 0) {
       if (step === 1) {
@@ -694,6 +696,23 @@ export default function RegistrationForm({ representante }: RegistrationFormProp
           </Card>
         )}
 
+        {/* BLOCO 7 - Confirmação de Adesão */}
+        {step === 6 && (() => {
+          const selectedPlan = Object.values(PLANS).flat().find((plan) => plan.id === formData.plan_id)
+          const planPrice = selectedPlan ? selectedPlan.price.toFixed(2).replace(".", ",") : "--"
+          return (
+            <Card>
+              <CardContent className="pt-6 px-6">
+                <div className="flex flex-col items-center text-center gap-4 py-4">
+                  <p className="text-base sm:text-lg text-gray-800 leading-relaxed max-w-xl">
+                    {"Ao finalizar seu cadastro, será necessário realizar o pagamento da sua adesão associativa no valor de R$ "}{planPrice}{". Você deseja prosseguir com a sua associação?"}
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+          )
+        })()}
+
         {/* BLOCO 3 - Forma de Envio */}
         {step === 2 && (
           <Card>
@@ -750,12 +769,12 @@ export default function RegistrationForm({ representante }: RegistrationFormProp
           ) : step > 0 ? (
             <Button type="button" variant="outline" onClick={goBack}>{"Voltar"}</Button>
           ) : <div />}
-          {step < 5 ? (
+          {step < 6 ? (
             <Button type="button" onClick={goNext} disabled={!canContinue()} className="bg-blue-600 hover:bg-blue-700 text-white">{"Continuar"}</Button>
           ) : (
             !submitted && (
-              <Button type="submit" disabled={loading || !canContinue()} className="bg-green-600 hover:bg-green-700 text-white">
-                {"Finalizar Cadastro"}
+              <Button type="submit" disabled={loading || !canContinue()} className="bg-blue-600 hover:bg-blue-700 text-white">
+                {"Sim, quero continuar"}
               </Button>
             )
           )}
