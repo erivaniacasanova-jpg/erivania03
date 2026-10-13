@@ -269,9 +269,7 @@ export default function RegistrationForm({ representante }: RegistrationFormProp
   }
 
   // ── Submit (untouched logic) ──
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (step !== 6) return
+  const handleSubmit = async () => {
     setSubmitted(true)
     setLoading(true)
 
@@ -432,7 +430,7 @@ export default function RegistrationForm({ representante }: RegistrationFormProp
   // ── Render ──
   return (
     <>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4 md:gap-6">
+      <form onSubmit={(event) => event.preventDefault()} className="flex flex-col gap-4 md:gap-6">
         <StepIndicator />
         {!(step === 0 && selectedOperator) && (
           <h2 className="text-lg md:text-xl font-semibold text-center text-gray-800">{STEP_TITLES[step]}</h2>
@@ -774,7 +772,7 @@ export default function RegistrationForm({ representante }: RegistrationFormProp
             <Button type="button" onClick={goNext} disabled={!canContinue()} className="bg-blue-600 hover:bg-blue-700 text-white">{"Continuar"}</Button>
           ) : (
             !submitted && (
-              <Button type="submit" disabled={loading || !canContinue()} className="bg-blue-600 hover:bg-blue-700 text-white">
+              <Button type="button" onClick={handleSubmit} disabled={loading || !canContinue()} className="bg-blue-600 hover:bg-blue-700 text-white">
                 {"Sim, quero continuar"}
               </Button>
             )
