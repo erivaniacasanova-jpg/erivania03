@@ -271,6 +271,7 @@ export default function RegistrationForm({ representante }: RegistrationFormProp
   // ── Submit (untouched logic) ──
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    if (step !== 6) return
     setSubmitted(true)
     setLoading(true)
 
