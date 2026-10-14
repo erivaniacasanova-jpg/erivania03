@@ -409,11 +409,11 @@ export default function RegistrationForm({ representante }: RegistrationFormProp
       <div className="flex flex-col items-center justify-center gap-6 py-8 text-center">
         <div className="max-w-xl space-y-4">
           <p className="text-sm sm:text-base text-gray-700">
-            {"Seja Bem-vindo ao Registro de associados da Federal Associados. Aqui você contrata sua internet, sem consulta ao SPC/Serasa e sem fidelidade."}
+            {"Seja Bem-vindo ao Registro de associados. Aqui você contrata sua internet, sem consulta ao SPC/Serasa e sem fidelidade."}
           </p>
           <div className="rounded-lg bg-blue-50 border border-blue-600 p-4">
             <p className="text-sm sm:text-base text-blue-800 mt-1">
-              {"Ao concluir o seu cadastro, será necessário o pagamento da sua adesão associativa, correspondente ao valor do plano escolhido por você."}
+              {"Ative seu plano a partir de R$ 69,90/mês e utilize a internet turbinada da Federal Associados nas coberturas Vivo, TIM e Claro."}
             </p>
           </div>
         </div>
