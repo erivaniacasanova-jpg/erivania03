@@ -56,9 +56,9 @@ const PLANS = {
     { id: "154", name: "500GB SEM LIGAÇÃO", price: 189.9, esim: true },
   ],
   CLARO: [
+    { id: "179", name: "40GB COM LIGACAO", price: 49.9, esim: true },
     { id: "57", name: "80GB COM LIGACAO", price: 69.9, esim: true },
     { id: "183", name: "160GB COM LIGACAO", price: 99.9, esim: true },
-    { id: "179", name: "40GB COM LIGACAO", price: 49.9, esim: true },
   ],
 }
 
