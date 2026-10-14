@@ -414,7 +414,7 @@ export default function RegistrationForm({ representante }: RegistrationFormProp
           </p>
           <div className="rounded-lg bg-blue-50 border border-blue-600 p-4">
             <p className="text-sm sm:text-base text-blue-800 mt-1">
-              {"Ative seu plano a partir de R$ 69,90/mês e utilize a internet turbinada da Federal Associados nas coberturas Vivo, TIM e Claro."}
+              {"Ative seu plano a partir de R$ 49,90/mês e utilize a internet turbinada da Federal Associados nas coberturas Vivo, TIM e Claro."}
             </p>
           </div>
         </div>
