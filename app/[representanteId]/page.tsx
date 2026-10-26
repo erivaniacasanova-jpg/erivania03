@@ -34,12 +34,6 @@ export default async function RepresentantePage({ params }: { params: Promise<{ 
       nome: "Alex Lourenço",
       whatsapp: "5524981472604",
     },
-    "88389": {
-    id: "88389",
-    nome: "Wagner Cruz Vieira",
-    whatsapp: "5521996098857",
-    linkCadastro: "https://wagner.associarse.com.br"
-   },
      "119294": {
       id: "119294",
       nome: " Narcisio Marques Da Silva",
