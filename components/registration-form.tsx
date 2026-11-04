@@ -53,7 +53,9 @@ const PLANS = {
   VIVO: [
     { id: "69", name: "60GB COM LIGACAO", price: 69.9, esim: true },
     { id: "52", name: "100GB COM LIGACAO", price: 99.99, esim: true },
-    { id: "78", name: "300GB SEM LIGAÇÃO", price: 189.9, esim: true },
+    { id: "221", name: "150GB COM LIGACAO", price: 150, esim: true },
+    { id: "78", name: "300GB SEM LIGAÇÃO", price: 189.90, esim: true },
+    { id: "84", name: "150GB COM LIGACAO", price: 300, esim: true },
     { id: "81", name: "500GB SEM LIGAÇÃO", price: 299.9, esim: true },
 ],
   TIM: [
