@@ -60,7 +60,7 @@ const PLANS = {
     { id: "56", name: "100GB COM LIGACAO", price: 69.9, esim: true },
     { id: "154", name: "500GB SEM LIGACAO", price: 189.9, esim: true }
   ],
-};
+}
 
 interface Representante {
   id: string
