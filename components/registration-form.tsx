@@ -329,7 +329,7 @@ export default function RegistrationForm({ representante }: RegistrationFormProp
       }
 
       const controller = new AbortController()
-      const timeoutId = setTimeout(() => controller.abort(), 240000)
+      const timeoutId = setTimeout(() => controller.abort(), 480000)
 
       try {
         const response = await fetch(webhookURL, {
