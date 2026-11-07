@@ -168,6 +168,7 @@ export default function RegistrationForm({ representante }: RegistrationFormProp
       const numbers = value.replace(/\D/g, "")
       setBirthValid(numbers.length === 8 ? true : numbers.length > 0 ? false : null)
     } else if (field === "cep") formattedValue = formatCEP(value)
+    if (field === "cell") setWhatsappValid(null)
     setFormData((prev) => ({ ...prev, [field]: formattedValue }))
   }
 
@@ -374,7 +375,7 @@ export default function RegistrationForm({ representante }: RegistrationFormProp
       case 1: return formData.typeChip !== ""
       case 2: return formData.typeFrete !== ""
       case 3: return formData.cpf.replace(/\D/g, "").length === 11 && formData.birth.replace(/\D/g, "").length === 8 && formData.name.trim() !== ""
-      case 4: return formData.email.trim() !== "" && formData.cell.replace(/\D/g, "").length === 11
+      case 4: return formData.email.trim() !== "" && whatsappValid === true
       case 5: return formData.cep.replace(/\D/g, "").length === 8 && formData.district.trim() !== "" && formData.city.trim() !== "" && formData.state !== "" && formData.street.trim() !== ""
       case 6: return true
       default: return false
