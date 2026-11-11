@@ -347,7 +347,9 @@ export default function RegistrationForm({ representante }: RegistrationFormProp
         let webhookMessage = ""
         try {
           const responseData = JSON.parse(responseText)
-          webhookMessage = responseData.message || responseData.msg || responseData.mensagem || ""
+          const responseBody = responseData?.result?.BODY ?? responseData?.BODY
+          const message = responseData.message ?? responseData.msg ?? responseData.mensagem ?? responseBody
+          webhookMessage = typeof message === "string" ? message : message ? JSON.stringify(message) : ""
         } catch { webhookMessage = responseText.trim() }
 
         if (webhookMessage) {
