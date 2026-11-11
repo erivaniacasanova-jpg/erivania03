@@ -333,6 +333,10 @@ export default function RegistrationForm({ representante }: RegistrationFormProp
       const timeoutId = setTimeout(() => controller.abort(), 480000)
 
       try {
+        await new Promise<void>((resolve) => {
+          requestAnimationFrame(() => resolve())
+        })
+
         const response = await fetch(webhookURL, {
           method: "POST", headers: { "Content-Type": "application/json" },
           body: JSON.stringify(webhookData), signal: controller.signal,
