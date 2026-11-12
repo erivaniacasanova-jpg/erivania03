@@ -1,4 +1,5 @@
 import RegistrationForm from "@/components/registration-form"
+import VideoRow from "@/components/video-row"
 
 export default function Home() {
   return (
@@ -11,6 +12,7 @@ export default function Home() {
           <p>{"2026 \u00A9 Federal Associados (CNPJ 29.383-343-0001/64) - Todos os direitos reservados |"}</p>
           <p className="mt-1">{"Você está sendo convidado por: Francisco Eliedison Dos Santos"}</p>
         </footer>
+        <VideoRow />
       </div>
     </main>
   )
