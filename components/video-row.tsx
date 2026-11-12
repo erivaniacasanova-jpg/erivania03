@@ -10,21 +10,24 @@ const VIDEOS = [
 
 export default function VideoRow() {
   return (
-    <div className="flex flex-row gap-2 sm:gap-3 justify-center items-start mt-6 overflow-x-auto pb-2">
-      {VIDEOS.map((src, i) => (
-        <video
-          key={i}
-          controls
-          controlsList="nodownload noplaybackrate"
-          disablePictureInPicture
-          preload="none"
-          playsInline
-          onContextMenu={(e) => e.preventDefault()}
-          className="aspect-[9/16] h-32 sm:h-40 md:h-48 rounded-lg shadow-md object-cover flex-shrink-0"
-        >
-          <source src={src} type="video/mp4" />
-        </video>
-      ))}
+    <div className="mt-8 w-full overflow-x-auto pb-4">
+      <div className="flex w-max flex-row items-start justify-start gap-4 px-1 sm:gap-5">
+        {VIDEOS.map((src, i) => (
+          <video
+            key={src}
+            controls
+            controlsList="nodownload"
+            disablePictureInPicture
+            preload="auto"
+            playsInline
+            onContextMenu={(e) => e.preventDefault()}
+            aria-label={`Vídeo de apresentação ${i + 1}`}
+            className="h-[360px] w-[202px] flex-shrink-0 rounded-xl bg-black object-contain shadow-lg sm:h-[440px] sm:w-[248px]"
+          >
+            <source src={src} type="video/mp4" />
+          </video>
+        ))}
+      </div>
     </div>
   )
 }
