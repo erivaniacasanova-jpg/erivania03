@@ -1,12 +1,6 @@
 "use client"
 
-const VIDEOS = [
-  "https://videos.suanetturbinada.com.br/formulariodecadastro/formulario1.mp4",
-  "https://videos.suanetturbinada.com.br/formulariodecadastro/formulario2.mp4",
-  "https://videos.suanetturbinada.com.br/formulariodecadastro/formulario3.mp4",
-  "https://videos.suanetturbinada.com.br/formulariodecadastro/formulario4.mp4",
-  "https://videos.suanetturbinada.com.br/formulariodecadastro/formulario5.mp4",
-]
+const VIDEOS = [1, 2, 3, 4, 5].map((video) => `/api/formularios-video/${video}`)
 
 export default function VideoRow() {
   return (
