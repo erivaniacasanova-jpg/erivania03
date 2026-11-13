@@ -91,6 +91,7 @@ export default function RegistrationForm({ representante }: RegistrationFormProp
   const [loading, setLoading] = useState(false)
   const [showErrorModal, setShowErrorModal] = useState(false)
   const [errorMessage, setErrorMessage] = useState("")
+  const [modalVariant, setModalVariant] = useState<"error" | "success">("error")
 
   const [cpfValidated, setCpfValidated] = useState(false)
   const [emailValidated, setEmailValidated] = useState(false)
@@ -99,7 +100,6 @@ export default function RegistrationForm({ representante }: RegistrationFormProp
   const [whatsappValid, setWhatsappValid] = useState<boolean | null>(null)
   const [whatsappValidating, setWhatsappValidating] = useState(false)
   const [selectedOperator, setSelectedOperator] = useState<"VIVO" | "TIM" | "CLARO" | null>(null)
-  const [submitted, setSubmitted] = useState(false)
   const [showCoberturaModal, setShowCoberturaModal] = useState(false)
 
   const [formData, setFormData] = useState({
@@ -272,7 +272,7 @@ export default function RegistrationForm({ representante }: RegistrationFormProp
 
   // ── Submit (untouched logic) ──
   const handleSubmit = async () => {
-    setSubmitted(true)
+    setModalVariant("error")
     setLoading(true)
 
     if (!validateCPF(formData.cpf)) {
@@ -332,11 +332,14 @@ export default function RegistrationForm({ representante }: RegistrationFormProp
       const controller = new AbortController()
       const timeoutId = setTimeout(() => controller.abort(), 100000)
 
-      try {
-        await new Promise<void>((resolve) => {
-          requestAnimationFrame(() => resolve())
-        })
+      const showResult = (message: string, variant: "error" | "success") => {
+        setErrorMessage(message)
+        setModalVariant(variant)
+        setShowErrorModal(true)
+        setLoading(false)
+      }
 
+      try {
         const response = await fetch(webhookURL, {
           method: "POST", headers: { "Content-Type": "application/json" },
           body: JSON.stringify(webhookData), signal: controller.signal,
@@ -352,14 +355,17 @@ export default function RegistrationForm({ representante }: RegistrationFormProp
           webhookMessage = typeof message === "string" ? message : message ? JSON.stringify(message) : ""
         } catch { webhookMessage = responseText.trim() }
 
-        if (webhookMessage) {
-          const lowerMessage = webhookMessage.toLowerCase()
-          const isError = lowerMessage.includes("erro") || lowerMessage.includes("já") || lowerMessage.includes("inválido") || lowerMessage.includes("falha") || lowerMessage.includes("não") || lowerMessage.includes("sendo utilizado") || !response.ok
-          if (isError) { setErrorMessage(webhookMessage); setShowErrorModal(true); setLoading(false); return }
-          toast({ description: webhookMessage }); setLoading(false); return
+        if (!response.ok) {
+          showResult(webhookMessage || "Erro ao processar cadastro. Tente novamente.", "error")
+          return
         }
-        if (response.ok) { setLoading(false); return }
-        setErrorMessage("Erro ao processar cadastro. Tente novamente."); setShowErrorModal(true); setLoading(false)
+        if (!webhookMessage) {
+          showResult("Cadastro realizado com sucesso.", "success")
+          return
+        }
+        const lowerMessage = webhookMessage.toLowerCase()
+        const isError = lowerMessage.includes("erro") || lowerMessage.includes("já") || lowerMessage.includes("inválido") || lowerMessage.includes("falha") || lowerMessage.includes("não") || lowerMessage.includes("sendo utilizado")
+        showResult(webhookMessage, isError ? "error" : "success")
       } catch (fetchError: unknown) {
         clearTimeout(timeoutId)
         if (fetchError instanceof Error && fetchError.name === "AbortError") {
@@ -783,11 +789,9 @@ export default function RegistrationForm({ representante }: RegistrationFormProp
           {step < 6 ? (
             <Button type="button" onClick={goNext} disabled={!canContinue()} className="bg-blue-600 hover:bg-blue-700 text-white">{"Continuar"}</Button>
           ) : (
-            !submitted && (
-              <Button type="button" onClick={handleSubmit} disabled={loading || !canContinue()} className="bg-blue-600 hover:bg-blue-700 text-white">
-                {"Sim, quero continuar"}
-              </Button>
-            )
+            <Button type="button" onClick={handleSubmit} disabled={loading || !canContinue()} className="bg-blue-600 hover:bg-blue-700 text-white">
+              {"Sim, quero continuar"}
+            </Button>
           )}
         </div>
       </form>
@@ -807,7 +811,7 @@ export default function RegistrationForm({ representante }: RegistrationFormProp
         </div>
       )}
 
-      <ErrorModal open={showErrorModal} onOpenChange={setShowErrorModal} message={errorMessage} />
+      <ErrorModal open={showErrorModal} onOpenChange={setShowErrorModal} message={errorMessage} variant={modalVariant} />
 
       {/* Modal de Consulta de Cobertura */}
       {showCoberturaModal && (
