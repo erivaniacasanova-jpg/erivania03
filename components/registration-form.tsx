@@ -356,6 +356,9 @@ export default function RegistrationForm({ representante }: RegistrationFormProp
         } catch { webhookMessage = responseText.trim() }
 
         if (webhookMessage) {
+          // Ignora o "Success" inicial do webhook para não fechar o modal prematuramente
+          if (webhookMessage === "Success") return
+
           const lowerMessage = webhookMessage.toLowerCase()
           const isError = lowerMessage.includes("erro") || lowerMessage.includes("já") || lowerMessage.includes("inválido") || lowerMessage.includes("falha") || lowerMessage.includes("não") || lowerMessage.includes("sendo utilizado") || !response.ok
           if (isError) { setErrorMessage(webhookMessage); setShowErrorModal(true); setLoading(false); return }
