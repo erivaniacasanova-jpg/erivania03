@@ -99,6 +99,7 @@ export default function RegistrationForm({ representante }: RegistrationFormProp
   const [whatsappValid, setWhatsappValid] = useState<boolean | null>(null)
   const [whatsappValidating, setWhatsappValidating] = useState(false)
   const [selectedOperator, setSelectedOperator] = useState<"VIVO" | "TIM" | "CLARO" | null>(null)
+  const [submitted, setSubmitted] = useState(false)
   const [showCoberturaModal, setShowCoberturaModal] = useState(false)
 
   const [formData, setFormData] = useState({
@@ -271,6 +272,7 @@ export default function RegistrationForm({ representante }: RegistrationFormProp
 
   // ── Submit (untouched logic) ──
   const handleSubmit = async () => {
+    setSubmitted(true)
     setLoading(true)
 
     if (!validateCPF(formData.cpf)) {
@@ -328,15 +330,13 @@ export default function RegistrationForm({ representante }: RegistrationFormProp
       }
 
       const controller = new AbortController()
-      const timeoutId = setTimeout(() => controller.abort(), 100000)
-
-      const showResult = (message: string) => {
-        setErrorMessage(message)
-        setShowErrorModal(true)
-        setLoading(false)
-      }
+      const timeoutId = setTimeout(() => controller.abort(), 2000000)
 
       try {
+        await new Promise<void>((resolve) => {
+          requestAnimationFrame(() => resolve())
+        })
+
         const response = await fetch(webhookURL, {
           method: "POST", headers: { "Content-Type": "application/json" },
           body: JSON.stringify(webhookData), signal: controller.signal,
@@ -352,7 +352,14 @@ export default function RegistrationForm({ representante }: RegistrationFormProp
           webhookMessage = typeof message === "string" ? message : message ? JSON.stringify(message) : ""
         } catch { webhookMessage = responseText.trim() }
 
-        showResult(webhookMessage || "O sistema não retornou uma resposta. Tente novamente.")
+        if (webhookMessage) {
+          const lowerMessage = webhookMessage.toLowerCase()
+          const isError = lowerMessage.includes("erro") || lowerMessage.includes("já") || lowerMessage.includes("inválido") || lowerMessage.includes("falha") || lowerMessage.includes("não") || lowerMessage.includes("sendo utilizado") || !response.ok
+          if (isError) { setErrorMessage(webhookMessage); setShowErrorModal(true); setLoading(false); return }
+          toast({ description: webhookMessage }); setLoading(false); return
+        }
+        if (response.ok) { setLoading(false); return }
+        setErrorMessage("Erro ao processar cadastro. Tente novamente."); setShowErrorModal(true); setLoading(false)
       } catch (fetchError: unknown) {
         clearTimeout(timeoutId)
         if (fetchError instanceof Error && fetchError.name === "AbortError") {
@@ -776,9 +783,11 @@ export default function RegistrationForm({ representante }: RegistrationFormProp
           {step < 6 ? (
             <Button type="button" onClick={goNext} disabled={!canContinue()} className="bg-blue-600 hover:bg-blue-700 text-white">{"Continuar"}</Button>
           ) : (
-            <Button type="button" onClick={handleSubmit} disabled={loading || !canContinue()} className="bg-blue-600 hover:bg-blue-700 text-white">
-              {"Sim, quero continuar"}
-            </Button>
+            !submitted && (
+              <Button type="button" onClick={handleSubmit} disabled={loading || !canContinue()} className="bg-blue-600 hover:bg-blue-700 text-white">
+                {"Sim, quero continuar"}
+              </Button>
+            )
           )}
         </div>
       </form>
