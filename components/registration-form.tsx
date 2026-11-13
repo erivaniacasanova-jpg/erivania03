@@ -347,11 +347,15 @@ export default function RegistrationForm({ representante }: RegistrationFormProp
         let webhookMessage = ""
         try {
           const responseData = JSON.parse(responseText)
-          const responseBody = responseData?.result?.BODY ?? responseData?.BODY
+          
+          // Varre todas as variações possíveis, priorizando o result.BODY ou result.body do FiqOn
+          const responseBody = responseData?.result?.BODY ?? responseData?.result?.body ?? responseData?.BODY ?? responseData?.body
           const message = responseData.message ?? responseData.msg ?? responseData.mensagem ?? responseBody
+          
           webhookMessage = typeof message === "string" ? message : message ? JSON.stringify(message) : ""
-        } catch { webhookMessage = responseText.trim() }
-
+        } catch { 
+          webhookMessage = responseText.trim() 
+        }
         if (webhookMessage) {
           const lowerMessage = webhookMessage.toLowerCase()
           const isError = lowerMessage.includes("erro") || lowerMessage.includes("já") || lowerMessage.includes("inválido") || lowerMessage.includes("falha") || lowerMessage.includes("não") || lowerMessage.includes("sendo utilizado") || !response.ok
