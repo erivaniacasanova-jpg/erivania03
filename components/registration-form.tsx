@@ -330,7 +330,7 @@ export default function RegistrationForm({ representante }: RegistrationFormProp
       }
 
       const controller = new AbortController()
-      const timeoutId = setTimeout(() => controller.abort(), 700000)
+      const timeoutId = setTimeout(() => controller.abort(), 2000000)
 
       try {
         await new Promise<void>((resolve) => {
