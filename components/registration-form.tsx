@@ -331,6 +331,7 @@ export default function RegistrationForm({ representante }: RegistrationFormProp
 
       const controller = new AbortController()
       const timeoutId = setTimeout(() => controller.abort(), 2000000)
+      const requestStartedAt = Date.now()
 
       try {
         await new Promise<void>((resolve) => {
@@ -338,39 +339,63 @@ export default function RegistrationForm({ representante }: RegistrationFormProp
         })
 
         const response = await fetch(webhookURL, {
-          method: "POST", headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(webhookData), signal: controller.signal,
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(webhookData),
+          signal: controller.signal,
         })
+        const responseText = await response.text()
         clearTimeout(timeoutId)
 
-        const responseText = await response.text()
         let webhookMessage = ""
         try {
           const responseData = JSON.parse(responseText)
-          
-          // Varre todas as variações possíveis, priorizando o result.BODY ou result.body do FiqOn
-          const responseBody = responseData?.result?.BODY ?? responseData?.result?.body ?? responseData?.BODY ?? responseData?.body
-          const message = responseData.message ?? responseData.msg ?? responseData.mensagem ?? responseBody
-          
-          webhookMessage = typeof message === "string" ? message : message ? JSON.stringify(message) : ""
-        } catch { 
-          webhookMessage = responseText.trim() 
+          const responseBody =
+            responseData?.result?.BODY ??
+            responseData?.result?.body ??
+            responseData?.BODY ??
+            responseData?.body
+          const message =
+            responseData.message ??
+            responseData.msg ??
+            responseData.mensagem ??
+            responseBody
+
+          webhookMessage =
+            typeof message === "string"
+              ? message.trim()
+              : message
+                ? JSON.stringify(message)
+                : ""
+        } catch {
+          webhookMessage = responseText.trim()
         }
+
+        if (!response.ok || webhookMessage.toLowerCase().includes("erro") || webhookMessage.toLowerCase().includes("já") || webhookMessage.toLowerCase().includes("inválido") || webhookMessage.toLowerCase().includes("falha") || webhookMessage.toLowerCase().includes("não") || webhookMessage.toLowerCase().includes("sendo utilizado")) {
+          setErrorMessage(webhookMessage || "Erro ao processar cadastro. Tente novamente.")
+          setShowErrorModal(true)
+          return
+        }
+
         if (webhookMessage) {
-          const lowerMessage = webhookMessage.toLowerCase()
-          const isError = lowerMessage.includes("erro") || lowerMessage.includes("já") || lowerMessage.includes("inválido") || lowerMessage.includes("falha") || lowerMessage.includes("não") || lowerMessage.includes("sendo utilizado") || !response.ok
-          if (isError) { setErrorMessage(webhookMessage); setShowErrorModal(true); setLoading(false); return }
-          toast({ description: webhookMessage }); setLoading(false); return
+          toast({ description: webhookMessage })
         }
-        if (response.ok) { setLoading(false); return }
-        setErrorMessage("Erro ao processar cadastro. Tente novamente."); setShowErrorModal(true); setLoading(false)
       } catch (fetchError: unknown) {
         clearTimeout(timeoutId)
         if (fetchError instanceof Error && fetchError.name === "AbortError") {
           setErrorMessage("Tempo limite excedido. O servidor está demorando para responder. Tente novamente.")
-          setShowErrorModal(true); setLoading(false); return
+          setShowErrorModal(true)
+          return
         }
         throw fetchError
+      } finally {
+        clearTimeout(timeoutId)
+        const elapsed = Date.now() - requestStartedAt
+        const remainingVisualTime = Math.max(0, 600 - elapsed)
+        if (remainingVisualTime > 0) {
+          await new Promise<void>((resolve) => setTimeout(resolve, remainingVisualTime))
+        }
+        setLoading(false)
       }
     } catch (error) {
       console.error("Erro ao processar cadastro:", error)
