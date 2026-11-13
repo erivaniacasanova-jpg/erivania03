@@ -349,7 +349,7 @@ export default function RegistrationForm({ representante }: RegistrationFormProp
         const responseText = await response.text()
         clearTimeout(timeoutId)
 
-        let webhookMessage = ""
+        let webhookMessage = responseText.trim()
         try {
           const responseData = JSON.parse(responseText)
           const responseBody =
@@ -357,30 +357,18 @@ export default function RegistrationForm({ representante }: RegistrationFormProp
             responseData?.result?.body ??
             responseData?.BODY ??
             responseData?.body
-          const message =
-            responseData.message ??
-            responseData.msg ??
-            responseData.mensagem ??
-            responseBody
+          const message = responseBody ?? responseData.message ?? responseData.msg ?? responseData.mensagem
 
-          webhookMessage =
-            typeof message === "string"
-              ? message.trim()
-              : message
-                ? JSON.stringify(message)
-                : ""
+          if (typeof message === "string") {
+            webhookMessage = message.trim()
+          } else if (message) {
+            webhookMessage = JSON.stringify(message)
+          }
         } catch {
           webhookMessage = responseText.trim()
         }
 
-        if (!response.ok || webhookMessage.toLowerCase().includes("erro") || webhookMessage.toLowerCase().includes("já") || webhookMessage.toLowerCase().includes("inválido") || webhookMessage.toLowerCase().includes("falha") || webhookMessage.toLowerCase().includes("não") || webhookMessage.toLowerCase().includes("sendo utilizado")) {
-          setWebhookMessage(webhookMessage || "Erro ao processar cadastro. Tente novamente.")
-          return
-        }
-
-        if (webhookMessage) {
-          setWebhookMessage(webhookMessage)
-        }
+        setWebhookMessage(webhookMessage || "O webhook não retornou uma mensagem.")
       } catch (fetchError: unknown) {
         clearTimeout(timeoutId)
         if (fetchError instanceof Error && fetchError.name === "AbortError") {
