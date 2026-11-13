@@ -62,6 +62,12 @@ const PLANS = {
   ],
 };
 
+const SHIPPING_OPTIONS = [
+  { id: "correios", chip: "fisico", label: "Receber pelos Correios", description: "Enviamos o chip para o endereço do cadastro. Prazo de 7 a 15 dias úteis." },
+  { id: "retirar", chip: "fisico", label: "Retirar na associação", description: "Na sede ou com um associado próximo, sem esperar pelo correio." },
+  { id: "esim", chip: "eSim", label: "Ativação por eSIM", description: "Sem chip físico, para aparelhos compatíveis. É a forma mais rápida." },
+]
+
 interface Representante {
   id: string
   nome: string
@@ -300,10 +306,7 @@ export default function RegistrationForm({ representante }: RegistrationFormProp
         planName = `${operator} - ${selectedPlan.name}`
       }
 
-      let formaEnvio = ""
-      if (formData.typeFrete === "Carta") formaEnvio = "Carta Registrada"
-      else if (formData.typeFrete === "semFrete") formaEnvio = "Retirar na Associação"
-      else if (formData.typeFrete === "eSim") formaEnvio = "eSim"
+      const formaEnvio = SHIPPING_OPTIONS.find((option) => option.id === formData.typeFrete)?.label ?? ""
 
       const webhookData = {
         nome: formData.name, cpf: formData.cpf, data_nascimento: formData.birth, email: formData.email,
@@ -729,33 +732,15 @@ export default function RegistrationForm({ representante }: RegistrationFormProp
           <Card>
             <CardContent className="pt-6 px-6">
               <RadioGroup value={formData.typeFrete} onValueChange={(value) => handleInputChange("typeFrete", value)} className="flex flex-col gap-3">
-                {formData.typeChip === "fisico" && (
-                  <>
-                    <label htmlFor="frete-carta" className={`flex items-start gap-3 p-4 rounded-lg border-2 cursor-pointer transition-colors ${formData.typeFrete === "Carta" ? "border-blue-600 bg-blue-50" : "border-gray-200 hover:border-gray-300"}`}>
-                      <RadioGroupItem value="Carta" id="frete-carta" className="mt-0.5" />
-                      <div>
-                        <span className="font-medium text-gray-900">{"Enviar via Carta Registrada"}</span>
-                        <p className="text-sm text-gray-500">{"Para quem vai receber o chip pelos Correios (Prazo de entrega 7 a 15 dias úteis.) Você receberá um código de rastreio."}</p>
-                      </div>
-                    </label>
-                    <label htmlFor="frete-sem" className={`flex items-start gap-3 p-4 rounded-lg border-2 cursor-pointer transition-colors ${formData.typeFrete === "semFrete" ? "border-blue-600 bg-blue-50" : "border-gray-200 hover:border-gray-300"}`}>
-                      <RadioGroupItem value="semFrete" id="frete-sem" className="mt-0.5" />
-                      <div>
-                        <span className="font-medium text-gray-900">{"Retirar na Associação ou com um Associado"}</span>
-                        <p className="text-sm text-gray-500">{"Se você vai retirar o chip pessoalmente com um representante"}</p>
-                      </div>
-                    </label>
-                  </>
-                )}
-                {formData.typeChip === "eSim" && (
-                  <label htmlFor="frete-esim" className={`flex items-center gap-3 p-4 rounded-lg border-2 cursor-pointer transition-colors ${formData.typeFrete === "eSim" ? "border-blue-600 bg-blue-50" : "border-gray-200 hover:border-gray-300"}`}>
-                    <RadioGroupItem value="eSim" id="frete-esim" />
+                {SHIPPING_OPTIONS.filter((option) => option.chip === formData.typeChip).map((option) => (
+                  <label key={option.id} htmlFor={`frete-${option.id}`} className={`flex items-start gap-3 p-4 rounded-lg border-2 cursor-pointer transition-colors ${formData.typeFrete === option.id ? "border-blue-600 bg-blue-50" : "border-gray-200 hover:border-gray-300"}`}>
+                    <RadioGroupItem value={option.id} id={`frete-${option.id}`} className="mt-0.5" />
                     <div>
-                      <span className="font-medium text-gray-900">{"Sem a necessidade de envio (eSim)"}</span>
-                      <p className="text-sm text-gray-500">{"O chip digital será ativado diretamente no seu aparelho"}</p>
+                      <span className="font-medium text-gray-900">{option.label}</span>
+                      <p className="text-sm text-gray-500">{option.description}</p>
                     </div>
                   </label>
-                )}
+                ))}
               </RadioGroup>
             </CardContent>
           </Card>
