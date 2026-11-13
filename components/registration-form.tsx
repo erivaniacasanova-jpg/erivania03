@@ -91,7 +91,6 @@ export default function RegistrationForm({ representante }: RegistrationFormProp
   const [loading, setLoading] = useState(false)
   const [showErrorModal, setShowErrorModal] = useState(false)
   const [errorMessage, setErrorMessage] = useState("")
-  const [modalVariant, setModalVariant] = useState<"error" | "success">("error")
 
   const [cpfValidated, setCpfValidated] = useState(false)
   const [emailValidated, setEmailValidated] = useState(false)
@@ -272,7 +271,6 @@ export default function RegistrationForm({ representante }: RegistrationFormProp
 
   // ── Submit (untouched logic) ──
   const handleSubmit = async () => {
-    setModalVariant("error")
     setLoading(true)
 
     if (!validateCPF(formData.cpf)) {
@@ -332,9 +330,8 @@ export default function RegistrationForm({ representante }: RegistrationFormProp
       const controller = new AbortController()
       const timeoutId = setTimeout(() => controller.abort(), 100000)
 
-      const showResult = (message: string, variant: "error" | "success") => {
+      const showResult = (message: string) => {
         setErrorMessage(message)
-        setModalVariant(variant)
         setShowErrorModal(true)
         setLoading(false)
       }
@@ -355,17 +352,7 @@ export default function RegistrationForm({ representante }: RegistrationFormProp
           webhookMessage = typeof message === "string" ? message : message ? JSON.stringify(message) : ""
         } catch { webhookMessage = responseText.trim() }
 
-        if (!response.ok) {
-          showResult(webhookMessage || "Erro ao processar cadastro. Tente novamente.", "error")
-          return
-        }
-        if (!webhookMessage) {
-          showResult("Cadastro realizado com sucesso.", "success")
-          return
-        }
-        const lowerMessage = webhookMessage.toLowerCase()
-        const isError = lowerMessage.includes("erro") || lowerMessage.includes("já") || lowerMessage.includes("inválido") || lowerMessage.includes("falha") || lowerMessage.includes("não") || lowerMessage.includes("sendo utilizado")
-        showResult(webhookMessage, isError ? "error" : "success")
+        showResult(webhookMessage || "O sistema não retornou uma resposta. Tente novamente.")
       } catch (fetchError: unknown) {
         clearTimeout(timeoutId)
         if (fetchError instanceof Error && fetchError.name === "AbortError") {
@@ -811,7 +798,7 @@ export default function RegistrationForm({ representante }: RegistrationFormProp
         </div>
       )}
 
-      <ErrorModal open={showErrorModal} onOpenChange={setShowErrorModal} message={errorMessage} variant={modalVariant} />
+      <ErrorModal open={showErrorModal} onOpenChange={setShowErrorModal} message={errorMessage} />
 
       {/* Modal de Consulta de Cobertura */}
       {showCoberturaModal && (
