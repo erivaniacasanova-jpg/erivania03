@@ -91,7 +91,6 @@ export default function RegistrationForm({ representante }: RegistrationFormProp
   const [loading, setLoading] = useState(false)
   const [showErrorModal, setShowErrorModal] = useState(false)
   const [errorMessage, setErrorMessage] = useState("")
-  const [webhookMessage, setWebhookMessage] = useState("")
 
   const [cpfValidated, setCpfValidated] = useState(false)
   const [emailValidated, setEmailValidated] = useState(false)
@@ -274,7 +273,6 @@ export default function RegistrationForm({ representante }: RegistrationFormProp
   // ── Submit (untouched logic) ──
   const handleSubmit = async () => {
     setSubmitted(true)
-    setWebhookMessage("")
     setLoading(true)
 
     if (!validateCPF(formData.cpf)) {
@@ -332,8 +330,7 @@ export default function RegistrationForm({ representante }: RegistrationFormProp
       }
 
       const controller = new AbortController()
-      const timeoutId = setTimeout(() => controller.abort(), 2000000)
-      const requestStartedAt = Date.now()
+      const timeoutId = setTimeout(() => controller.abort(), 100000)
 
       try {
         await new Promise<void>((resolve) => {
@@ -341,50 +338,35 @@ export default function RegistrationForm({ representante }: RegistrationFormProp
         })
 
         const response = await fetch(webhookURL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(webhookData),
-          signal: controller.signal,
+          method: "POST", headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(webhookData), signal: controller.signal,
         })
-        const responseText = await response.text()
         clearTimeout(timeoutId)
 
-        let webhookMessage = responseText.trim()
+        const responseText = await response.text()
+        let webhookMessage = ""
         try {
           const responseData = JSON.parse(responseText)
-          const responseBody =
-            responseData?.result?.BODY ??
-            responseData?.result?.body ??
-            responseData?.BODY ??
-            responseData?.body
-          const message = responseBody ?? responseData.message ?? responseData.msg ?? responseData.mensagem
+          const responseBody = responseData?.result?.BODY ?? responseData?.BODY
+          const message = responseData.message ?? responseData.msg ?? responseData.mensagem ?? responseBody
+          webhookMessage = typeof message === "string" ? message : message ? JSON.stringify(message) : ""
+        } catch { webhookMessage = responseText.trim() }
 
-          if (typeof message === "string") {
-            webhookMessage = message.trim()
-          } else if (message) {
-            webhookMessage = JSON.stringify(message)
-          }
-        } catch {
-          webhookMessage = responseText.trim()
+        if (webhookMessage) {
+          const lowerMessage = webhookMessage.toLowerCase()
+          const isError = lowerMessage.includes("erro") || lowerMessage.includes("já") || lowerMessage.includes("inválido") || lowerMessage.includes("falha") || lowerMessage.includes("não") || lowerMessage.includes("sendo utilizado") || !response.ok
+          if (isError) { setErrorMessage(webhookMessage); setShowErrorModal(true); setLoading(false); return }
+          toast({ description: webhookMessage }); setLoading(false); return
         }
-
-        setWebhookMessage(webhookMessage || "O webhook não retornou uma mensagem.")
+        if (response.ok) { setLoading(false); return }
+        setErrorMessage("Erro ao processar cadastro. Tente novamente."); setShowErrorModal(true); setLoading(false)
       } catch (fetchError: unknown) {
         clearTimeout(timeoutId)
         if (fetchError instanceof Error && fetchError.name === "AbortError") {
           setErrorMessage("Tempo limite excedido. O servidor está demorando para responder. Tente novamente.")
-          setShowErrorModal(true)
-          return
+          setShowErrorModal(true); setLoading(false); return
         }
         throw fetchError
-      } finally {
-        clearTimeout(timeoutId)
-        const elapsed = Date.now() - requestStartedAt
-        const remainingVisualTime = Math.max(0, 600 - elapsed)
-        if (remainingVisualTime > 0) {
-          await new Promise<void>((resolve) => setTimeout(resolve, remainingVisualTime))
-        }
-        setLoading(false)
       }
     } catch (error) {
       console.error("Erro ao processar cadastro:", error)
@@ -810,28 +792,17 @@ export default function RegistrationForm({ representante }: RegistrationFormProp
         </div>
       </form>
 
-      {(loading || webhookMessage) && (
+      {/* Popup de processamento */}
+      {loading && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
           <div className="bg-white rounded-lg p-6 mx-auto max-w-md w-full shadow-2xl text-center">
-            {loading ? (
-              <>
-                <div className="flex justify-center mb-4">
-                  <div className="h-10 w-10 animate-spin rounded-full border-4 border-blue-600 border-t-transparent" />
-                </div>
-                <h2 className="text-lg font-bold text-red-600 mb-3">{"ATEN\u00C7\u00C3O!"}</h2>
-                <p className="text-gray-700 text-sm sm:text-base leading-relaxed">
-                  {"N\u00E3o feche essa tela. Estamos processando o seu cadastro. Aguarde a finaliza\u00E7\u00E3o."}
-                </p>
-              </>
-            ) : (
-              <>
-                <h2 className="text-lg font-bold text-gray-900 mb-3">Resposta do cadastro</h2>
-                <p className="text-gray-700 text-sm sm:text-base leading-relaxed whitespace-pre-wrap">{webhookMessage}</p>
-                <Button type="button" onClick={() => setWebhookMessage("")} className="mt-6 bg-blue-600 hover:bg-blue-700 text-white">
-                  OK
-                </Button>
-              </>
-            )}
+            <div className="flex justify-center mb-4">
+              <div className="h-10 w-10 animate-spin rounded-full border-4 border-blue-600 border-t-transparent" />
+            </div>
+            <h2 className="text-lg font-bold text-red-600 mb-3">{"ATEN\u00C7\u00C3O!"}</h2>
+            <p className="text-gray-700 text-sm sm:text-base leading-relaxed">
+              {"N\u00E3o feche essa tela. Estamos processando o seu cadastro. Aguarde a finaliza\u00E7\u00E3o."}
+            </p>
           </div>
         </div>
       )}
