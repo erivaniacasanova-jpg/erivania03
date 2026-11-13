@@ -91,6 +91,7 @@ export default function RegistrationForm({ representante }: RegistrationFormProp
   const [loading, setLoading] = useState(false)
   const [showErrorModal, setShowErrorModal] = useState(false)
   const [errorMessage, setErrorMessage] = useState("")
+  const [webhookMessage, setWebhookMessage] = useState("")
 
   const [cpfValidated, setCpfValidated] = useState(false)
   const [emailValidated, setEmailValidated] = useState(false)
@@ -273,6 +274,7 @@ export default function RegistrationForm({ representante }: RegistrationFormProp
   // ── Submit (untouched logic) ──
   const handleSubmit = async () => {
     setSubmitted(true)
+    setWebhookMessage("")
     setLoading(true)
 
     if (!validateCPF(formData.cpf)) {
@@ -372,13 +374,12 @@ export default function RegistrationForm({ representante }: RegistrationFormProp
         }
 
         if (!response.ok || webhookMessage.toLowerCase().includes("erro") || webhookMessage.toLowerCase().includes("já") || webhookMessage.toLowerCase().includes("inválido") || webhookMessage.toLowerCase().includes("falha") || webhookMessage.toLowerCase().includes("não") || webhookMessage.toLowerCase().includes("sendo utilizado")) {
-          setErrorMessage(webhookMessage || "Erro ao processar cadastro. Tente novamente.")
-          setShowErrorModal(true)
+          setWebhookMessage(webhookMessage || "Erro ao processar cadastro. Tente novamente.")
           return
         }
 
         if (webhookMessage) {
-          toast({ description: webhookMessage })
+          setWebhookMessage(webhookMessage)
         }
       } catch (fetchError: unknown) {
         clearTimeout(timeoutId)
@@ -821,17 +822,28 @@ export default function RegistrationForm({ representante }: RegistrationFormProp
         </div>
       </form>
 
-      {/* Popup de processamento */}
-      {loading && (
+      {(loading || webhookMessage) && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
           <div className="bg-white rounded-lg p-6 mx-auto max-w-md w-full shadow-2xl text-center">
-            <div className="flex justify-center mb-4">
-              <div className="h-10 w-10 animate-spin rounded-full border-4 border-blue-600 border-t-transparent" />
-            </div>
-            <h2 className="text-lg font-bold text-red-600 mb-3">{"ATEN\u00C7\u00C3O!"}</h2>
-            <p className="text-gray-700 text-sm sm:text-base leading-relaxed">
-              {"N\u00E3o feche essa tela. Estamos processando o seu cadastro. Aguarde a finaliza\u00E7\u00E3o."}
-            </p>
+            {loading ? (
+              <>
+                <div className="flex justify-center mb-4">
+                  <div className="h-10 w-10 animate-spin rounded-full border-4 border-blue-600 border-t-transparent" />
+                </div>
+                <h2 className="text-lg font-bold text-red-600 mb-3">{"ATEN\u00C7\u00C3O!"}</h2>
+                <p className="text-gray-700 text-sm sm:text-base leading-relaxed">
+                  {"N\u00E3o feche essa tela. Estamos processando o seu cadastro. Aguarde a finaliza\u00E7\u00E3o."}
+                </p>
+              </>
+            ) : (
+              <>
+                <h2 className="text-lg font-bold text-gray-900 mb-3">Resposta do cadastro</h2>
+                <p className="text-gray-700 text-sm sm:text-base leading-relaxed whitespace-pre-wrap">{webhookMessage}</p>
+                <Button type="button" onClick={() => setWebhookMessage("")} className="mt-6 bg-blue-600 hover:bg-blue-700 text-white">
+                  OK
+                </Button>
+              </>
+            )}
           </div>
         </div>
       )}
