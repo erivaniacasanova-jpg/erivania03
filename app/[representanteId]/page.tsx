@@ -5,11 +5,7 @@ export default async function RepresentantePage({ params }: { params: Promise<{ 
   const { representanteId } = await params
 
   const representantes = {
-    "134684": {
-      id: "134684",
-      nome: "William Dos Santos Pessoa",
-      whatsapp: "5521969400194",
-    },
+    
     "135302": {
       id: "135302",
       nome: "Antonia Erivania Delmiro Jacinto",
