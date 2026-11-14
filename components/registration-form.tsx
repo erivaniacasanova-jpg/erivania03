@@ -64,7 +64,7 @@ const PLANS = {
 
 const SHIPPING_OPTIONS = [
   { id: "correios", chip: "fisico", label: "Receber pelos Correios", description: "Enviamos o chip para o endereço do cadastro. Prazo de 7 a 15 dias úteis." },
-  { id: "retirar", chip: "fisico", label: "Retirar na associação", description: "Na sede ou com um associado próximo, sem esperar pelo correio." },
+  { id: "retirar", chip: "fisico", label: "Retirar na Associação", description: "Na sede ou com um associado próximo, sem esperar pelo correio." }, // Padronizado com Inicial Maiúscula
   { id: "esim", chip: "eSim", label: "Ativação por eSIM", description: "Sem chip físico, para aparelhos compatíveis. É a forma mais rápida." },
 ]
 
@@ -309,11 +309,25 @@ export default function RegistrationForm({ representante }: RegistrationFormProp
       const formaEnvio = SHIPPING_OPTIONS.find((option) => option.id === formData.typeFrete)?.label ?? ""
 
       const webhookData = {
-        nome: formData.name, cpf: formData.cpf, data_nascimento: formData.birth, email: formData.email,
-        whatsapp: formData.cell, telefone_fixo: "", plano: planName, plan_id: formData.plan_id,
-        tipo_chip: formData.typeChip === "fisico" ? "fisico" : "eSim", forma_envio: formaEnvio,
-        cep: formData.cep, endereco: formData.street, numero: formData.number, complemento: formData.complement,
-        bairro: formData.district, cidade: formData.city, estado: formData.state, referral_id: REFERRAL_ID,
+        nome: formData.name, 
+        cpf: formData.cpf, 
+        data_nascimento: formData.birth, 
+        email: formData.email,
+        whatsapp: formData.cell, 
+        telefone_fixo: "", 
+        plano: planName, 
+        plan_id: formData.plan_id,
+        tipo_chip: formData.typeChip === "fisico" ? "fisico" : "eSim", 
+        forma_envio: formaEnvio,
+        typeFrete: formData.typeFrete, // Chave exata descoberta na API oficial
+        cep: formData.cep, 
+        endereco: formData.street, 
+        numero: formData.number, 
+        complemento: formData.complement,
+        bairro: formData.district, 
+        cidade: formData.city, 
+        estado: formData.state, 
+        referral_id: REFERRAL_ID,
       }
 
       const webhookURLs: { [key: string]: string } = {
@@ -489,53 +503,53 @@ export default function RegistrationForm({ representante }: RegistrationFormProp
             <CardContent className="pt-6 px-6">
               <div className="flex flex-col gap-4">
                 {/* Seletores de Operadora */}
-{!selectedOperator && (
-  <div className="flex flex-col gap-3">
-    <button
-      type="button"
-      onClick={() => setSelectedOperator("CLARO")}
-      className="flex items-center justify-between p-4 rounded-lg border-2 border-red-300 bg-red-50 hover:border-red-500 hover:bg-red-100 transition-colors cursor-pointer"
-    >
-      <span className="font-semibold text-lg text-red-700">CLARO</span>
-      <svg className="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-      </svg>
-    </button>
+                {!selectedOperator && (
+                  <div className="flex flex-col gap-3">
+                    <button
+                      type="button"
+                      onClick={() => setSelectedOperator("CLARO")}
+                      className="flex items-center justify-between p-4 rounded-lg border-2 border-red-300 bg-red-50 hover:border-red-500 hover:bg-red-100 transition-colors cursor-pointer"
+                    >
+                      <span className="font-semibold text-lg text-red-700">CLARO</span>
+                      <svg className="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </button>
 
-    <button
-      type="button"
-      onClick={() => setSelectedOperator("VIVO")}
-      className="flex items-center justify-between p-4 rounded-lg border-2 border-violet-300 bg-violet-50 hover:border-violet-500 hover:bg-violet-100 transition-colors cursor-pointer"
-    >
-      <span className="font-semibold text-lg text-violet-700">VIVO</span>
-      <svg className="w-5 h-5 text-violet-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-      </svg>
-    </button>
+                    <button
+                      type="button"
+                      onClick={() => setSelectedOperator("VIVO")}
+                      className="flex items-center justify-between p-4 rounded-lg border-2 border-violet-300 bg-violet-50 hover:border-violet-500 hover:bg-violet-100 transition-colors cursor-pointer"
+                    >
+                      <span className="font-semibold text-lg text-violet-700">VIVO</span>
+                      <svg className="w-5 h-5 text-violet-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </button>
 
-    <button
-      type="button"
-      onClick={() => setSelectedOperator("TIM")}
-      className="flex items-center justify-between p-4 rounded-lg border-2 border-blue-300 bg-blue-50 hover:border-blue-500 hover:bg-blue-100 transition-colors cursor-pointer"
-    >
-      <span className="font-semibold text-lg text-blue-700">TIM</span>
-      <svg className="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-      </svg>
-    </button>
+                    <button
+                      type="button"
+                      onClick={() => setSelectedOperator("TIM")}
+                      className="flex items-center justify-between p-4 rounded-lg border-2 border-blue-300 bg-blue-50 hover:border-blue-500 hover:bg-blue-100 transition-colors cursor-pointer"
+                    >
+                      <span className="font-semibold text-lg text-blue-700">TIM</span>
+                      <svg className="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </button>
 
-    <button
-      type="button"
-      onClick={() => setShowCoberturaModal(true)}
-      className="flex items-center justify-between p-4 rounded-lg border-2 border-gray-200 hover:border-orange-500 hover:bg-orange-50 transition-colors cursor-pointer"
-    >
-      <span className="font-semibold text-lg" style={{ color: "#EA580C" }}>NÃO SEI</span>
-      <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-      </svg>
-    </button>
-  </div>
-)}
+                    <button
+                      type="button"
+                      onClick={() => setShowCoberturaModal(true)}
+                      className="flex items-center justify-between p-4 rounded-lg border-2 border-gray-200 hover:border-orange-500 hover:bg-orange-50 transition-colors cursor-pointer"
+                    >
+                      <span className="font-semibold text-lg" style={{ color: "#EA580C" }}>NÃO SEI</span>
+                      <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </button>
+                  </div>
+                )}
 
                 {/* Seletor de Planos */}
                 {selectedOperator && (
