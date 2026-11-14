@@ -63,10 +63,10 @@ const PLANS = {
 };
 
 const SHIPPING_OPTIONS = [
-  { id: "correios", chip: "fisico", label: "Receber pelos Correios", description: "Enviamos o chip para o endereço do cadastro. Prazo de 7 a 15 dias úteis." },
-  { id: "semFrete", chip: "fisico", label: "Retirar na Associação", description: "Na sede ou com um associado próximo, sem esperar pelo correio." }, // <-- Alterado o id para "semFrete"
-  { id: "esim", chip: "eSim", label: "Ativação por eSIM", description: "Sem chip físico, para aparelhos compatíveis. É a forma mais rápida." },
-]
+    { id: "Carta", chip: "fisico", label: "Receber pelos Correios", description: "Enviamos o chip para o endereço do cadastro. Prazo de 7 a 15 dias úteis." },
+    { id: "semFrete", chip: "fisico", label: "Retirar na Associação", description: "Na sede ou com um associado próximo, sem esperar pelo correio." },
+    { id: "eSim", chip: "eSim", label: "Ativação por eSIM", description: "Sem chip físico, para aparelhos compatíveis. É a forma mais rápida." },
+];
 
 interface Representante {
   id: string
