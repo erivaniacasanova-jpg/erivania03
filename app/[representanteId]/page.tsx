@@ -76,3 +76,4 @@ export default async function RepresentantePage({ params }: { params: Promise<{ 
       </div>
     </main>
   )
+  }
