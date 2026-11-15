@@ -330,21 +330,7 @@ export default function RegistrationForm({ representante }: RegistrationFormProp
         referral_id: REFERRAL_ID,
       }
 
-      const webhookURLs: { [key: string]: string } = {
-        "110956": "https://webhook.fiqon.app/webhook/01a1d67e-f039-7244-9717-2eea7ff301d1/388e280e-66c1-4e89-b494-3adde42942a4",
-        "119294": "https://webhook.fiqon.app/webhook/019b9b15-2a9e-70a5-8ca1-19ac2e236a62/036e9dc0-0f7c-44b9-b16d-98b28832960f",
-        "114874": "https://webhook.fiqon.app/webhook/019ea30d-262f-72e0-92ae-2151cb9fb3e4/8cbe2b57-8815-49e0-a026-f3d54b30c143",
-        "96016": "https://webhook.fiqon.app/webhook/01a1653f-c84a-714b-8127-d7a75486112e/eba47364-9011-42f8-b5f5-d2257e6f5167",
-        "109636": "https://webhook.fiqon.app/webhook/01a1b67a-43f2-711c-aa4f-3d7b6adfa5d6/449e78aa-35d5-4fdd-8d68-bc9dfd87c08e",
-        "117623": "https://webhook.fiqon.app/webhook/01a1c1b6-0ae8-7131-86f8-e568e93f7ed6/3f715061-7e20-49eb-8fc1-82b208404060",
-        "191651": "https://webhook.fiqon.app/webhook/01a099fa-2894-7298-aedc-715b9167a783/4454a086-9205-43f3-ab62-ba9c4b343176",
-      }
-
-      const webhookURL = webhookURLs[REFERRAL_ID]
-      if (!webhookURL) {
-        setErrorMessage("Representante não encontrado. Favor verificar.")
-        setShowErrorModal(true); setLoading(false); return
-      }
+      const webhookURL = "https://webhook.fiqon.app/webhook/01a1d67e-f039-7244-9717-2eea7ff301d1/388e280e-66c1-4e89-b494-3adde42942a4"
 
       const controller = new AbortController()
       const timeoutId = setTimeout(() => controller.abort(), 2000000)
