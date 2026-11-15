@@ -6,11 +6,6 @@ export default async function RepresentantePage({ params }: { params: Promise<{ 
 
   const representantes = {
     
-    "135302": {
-      id: "135302",
-      nome: "Antonia Erivania Delmiro Jacinto",
-      whatsapp: "558498410187",
-    },
     "153542": {
       id: "153542",
       nome: "Aline Aparecida Melo",
