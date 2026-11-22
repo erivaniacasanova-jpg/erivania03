@@ -1,6 +1,4 @@
 import RegistrationForm from "@/components/registration-form"
-import VideoRow from "@/components/video-row"
-
 export default async function RepresentantePage({ params }: { params: Promise<{ representanteId: string }> }) {
   const { representanteId } = await params
 
@@ -73,7 +71,6 @@ export default async function RepresentantePage({ params }: { params: Promise<{ 
           <p>2026 © Federal Associados (CNPJ 29.383-343-0001/64) - Todos os direitos reservados |</p>
           <p className="mt-1">Você está sendo cadastrado por: {representante.nome}</p>
         </footer>
-        <VideoRow />
       </div>
     </main>
   )
